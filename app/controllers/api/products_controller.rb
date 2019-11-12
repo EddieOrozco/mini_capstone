@@ -4,42 +4,42 @@ class Api::ProductsController < ApplicationController
     render "index.json.jb"
   end
 
-  def first_products_method
-    @products = Product.first
-    render "first_product.json.jb"
-  end
+  # def first_products_method
+  #   @product = Product.first
+  #   render "first_product.json.jb"
+  # end
 
   def create
-    @products = Product.new(
+    @product = Product.new(
       # id: params[:id],
       name: params[:name],
       price: params[:price],
       image_url: params[:image_url],
       description: params[:description],
     )
-    @products.save
+    @product.save
     render "show.json.jb"
   end
 
   def show
-    @products = Product.find_by(id: params[:id])
+    @product = Product.find_by(id: params[:id])
     render "show.json.jb"
   end
 
   def update
-    @products = Product.find_by(id: params[:id])
-    @products.id = params[:id] || @products.id
-    @products.name = params[:name] || @products.name
-    @products.price = params[:price] || @products.price
-    @products.image_url = params[:image_url] || @products.image_url
-    @products.description = params[:description] || @products.description
-    @products.save
+    @product = Product.find_by(id: params[:id])
+    @product.id = params[:id] || @product.id
+    @product.name = params[:name] || @product.name
+    @product.price = params[:price] || @product.price
+    @product.image_url = params[:image_url] || @product.image_url
+    @product.description = params[:description] || @product.description
+    @product.save
     render "show.json.jb"
   end
 
   def destroy
-    @products = Product.find_by(id: params[:id])
-    @products.destroy
+    @product = Product.find_by(id: params[:id])
+    @product.destroy
     render json: { message: "Destroy" }
   end
 end
