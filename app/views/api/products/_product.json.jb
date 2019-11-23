@@ -1,4 +1,3 @@
-
 {
   id: product.id,
   name: product.name,
@@ -6,6 +5,8 @@
   is_discounted?: product.is_discounted?,
   tax: product.tax,
   total: product.total,
-  image_url: product.image_url,
   description: product.description,
+  supplier_id: product.supplier,
+  images: product.images,
+  categories: product.categories,
 }

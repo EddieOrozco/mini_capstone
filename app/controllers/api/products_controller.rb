@@ -1,6 +1,17 @@
 class Api::ProductsController < ApplicationController
+  before_action :authenticate_admin, except: [:index, :show]
+
   def index
-    @products = Product.all.order(:id)
+    pp current_user
+    @products = Product.all
+    if params[:search]
+      @products = @products.where("name ILIKE ?", "%#{params[:search]}%")
+    end
+    if params[:category]
+      category = Category.find_by(name: params[:category])
+      @products = category.products
+    end
+    @products = @products.order(:id => :asc)
     render "index.json.jb"
   end
 
@@ -14,11 +25,14 @@ class Api::ProductsController < ApplicationController
       # id: params[:id],
       name: params[:name],
       price: params[:price],
-      image_url: params[:image_url],
+      # image_url: params[:image_url],
       description: params[:description],
     )
-    @product.save
-    render "show.json.jb"
+    if @product.save
+      render "show.json.jb"
+    else
+      render json: { errors: @product.errors.full_messages }, status: 422
+    end
   end
 
   def show
@@ -31,10 +45,14 @@ class Api::ProductsController < ApplicationController
     @product.id = params[:id] || @product.id
     @product.name = params[:name] || @product.name
     @product.price = params[:price] || @product.price
-    @product.image_url = params[:image_url] || @product.image_url
+    # @product.image_url = params[:image_url] || @product.image_url
     @product.description = params[:description] || @product.description
     @product.save
-    render "show.json.jb"
+    if @product.save
+      render "show.json.jb"
+    else
+      render json: { errors: @product.errors.full_messages }, status: 422
+    end
   end
 
   def destroy
